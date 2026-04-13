@@ -139,8 +139,8 @@ exec bash — обновление оболочки
 
 | Устройство                                     | Запись                          | Тип      |
 |------------------------------------------------|---------------------------------|----------|
-| HQ-RTR                                         | hq-rtra.au-team.irpo            | A, PTR   |
-| BR-RTR                                         | br-rtra.au-team.irpo            | A        |
+| HQ-RTR                                         | hq-rtr.au-team.irpo            | A, PTR   |
+| BR-RTR                                         | br-rtr.au-team.irpo            | A        |
 | HQ-SRV                                         | hq-srv.au-team.irpo             | A, PTR   |
 | HQ-CLI                                         | hq-cli.au-team.irpo             | A, PTR   |
 | BR-SRV                                         | br-srv.au-team.irpo             | A        |
