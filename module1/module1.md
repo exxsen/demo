@@ -264,7 +264,7 @@ passwd sshuser
 usermod -aG wheel sshuser
 ```
 
-Добавляем строку в /etc/sudoers
+Добавляем строку в `/etc/sudoers`
 
 ```bash
 sshuser ALL=(ALL) NOPASSWD:ALL
@@ -289,12 +289,11 @@ passwd net_admin
 usermod -aG wheel net_admin
 ```
 
-Добавляем строку в /etc/sudoers
+Добавляем строку в `/etc/sudoers`
 
 ```bash
 net_admin ALL=(ALL) NOPASSWD:ALL
 ```
-
 
 </details>
 
