@@ -162,7 +162,7 @@ FQDN (Fully Qualified Domain Name) — полное доменное имя ([Т
 ```bash
 mkdir /etc/net/ifaces/*имя интерфейса*
 ```
-Настраиваем файл `options` (для статичного ip-адреса)
+Настраиваем файл `options` (вариант для статичного ip-адреса)
 ```bash
 TYPE=eth
 BOOTPROTO=static
@@ -332,7 +332,7 @@ PasswordAuthentication yes
 Banner /etc/openssh/bannermotd
 AllowUsers  sshuser
 ```
-***`В параметре AllowUsers вместо пробела используется Tab`***
+**`В параметре AllowUsers вместо пробела используется Tab`**
 
 
 Создаем файл `/etc/openssh/bannermotd`
@@ -359,6 +359,59 @@ systemctl restart sshd
 <details>
 <summary>Решение</summary>
 <br>
+
+**Создание интерфейса на HQ-RTR**
+
+```bash
+mkdir /etc/net/ifaces/gre1
+```
+
+Настраиваем файл `options`
+```bash
+TYPE=iptun
+TUNTYPE=gre         
+TUNLOCAL=172.16.4.2
+TUNREMOTE=172.16.5.2
+DISABLED=no
+```
+Настраиваем файл `ipv4address` 
+```bash
+10.0.1.1/30 peer 10.0.1.2
+```
+
+Включение интерфейса
+
+```bash
+ifup gre1
+```
+
+#
+
+**Создание интерфейса на BR-RTR**
+
+```bash
+mkdir /etc/net/ifaces/gre1
+```
+
+Настраиваем файл `options`
+```bash
+TYPE=iptun
+TUNTYPE=gre
+TUNLOCAL=172.16.5.2
+TUNREMOTE=172.16.4.2
+DISABLED=no
+```
+Настраиваем файл `ipv4address` 
+
+```bash
+10.0.1.2/30 peer 10.0.1.1
+```
+
+Включение интерфейса
+
+```bash
+ifup gre1
+```
 
 </details>
 
