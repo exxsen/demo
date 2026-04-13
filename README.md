@@ -5,8 +5,13 @@
 #
 
 #
-Решение модулей
 
-Модуль 1
+### Решение модулей
 
-Модуль 2
+- **[Модуль 1](https://github.com/exxxidde/demo/blob/main/module1.md)**
+
+- **[Модуль 2](https://github.com/exxxidde/demo/blob/main/module2.md)**
+
+#
+
+#
