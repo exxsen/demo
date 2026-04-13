@@ -192,29 +192,40 @@ default via 172.16.4.1/28
 <br>
   
 Включение маршрутизации
+
 В файле `/etc/net/sysctl.conf` изменяем строку:
+
 ```bash
 net.ipv4.ip_forward = 1
 ```
+
 Изменения в файле `sysctl.conf` применяем следующей командой:
+
 ```bash
 sysctl -p /etc/sysctl.conf
 ```
 
 Настройка NAT экрана
+
 Включение NAT
+
 ```bash
 iptables -t nat -A POSTROUTING -o ens33 -j MASQUERADE #Включить маскарадинг для всего исходящего трафика через ens33
 iptables -A FORWARD -j ACCEPT # Разрешить весь форвардинг (без ограничений по интерфейсам)
 ```
+
 Сохранение правил 
+
 ```bash
 iptables-save > /etc/sysconfig/iptables
 ```
+
 Включение iptables (по умолчанию отключен)
+
 ```bash
 systemctl enable --now iptables
 ```
+
 </details>
 
 ## 3. Создание локальных учетных записей
