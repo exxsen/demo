@@ -151,6 +151,7 @@
 hostnamectl set-hostname <FQDN>; exec bash
 ```
 FQDN (Fully Qualified Domain Name) — полное доменное имя ([Таблица 2](#table2))
+
 `exec bash` — обновление оболочки
 
 **Настройка сетевых интерфейсов**
