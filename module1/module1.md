@@ -242,6 +242,52 @@ systemctl enable --now iptables
 <details>
 <summary>Решение</summary>
 <br>
+  
+**Создание пользователя `sshuser` с идентификатором `1010` на серверах**
+
+```bash
+useradd sshuser -u 1010
+```
+Задаем пароль:
+
+```bash
+passwd sshuser
+```
+
+Добавляем в группу wheel:
+
+```bash
+usermod -aG wheel sshuser
+```
+
+Добавляем строку в /etc/sudoers
+
+```bash
+sshuser ALL=(ALL) NOPASSWD:ALL
+```
+Создание пользователя net_admin на маршрутизаторах
+
+```bash
+useradd net_admin
+```
+Задаем пароль:
+
+```bash
+passwd net_admin
+```
+
+Добавляем в группу wheel:
+
+```bash
+usermod -aG wheel net_admin
+```
+
+Добавляем строку в /etc/sudoers
+
+```bash
+net_admin ALL=(ALL) NOPASSWD:ALL
+```
+
 
 </details>
 
