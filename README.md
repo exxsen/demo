@@ -4,8 +4,6 @@
 
 #
 
-#
-
 ### Решение модулей
 
 - **[Модуль 1](https://github.com/exxxidde/demo/blob/main/module1.md)**
