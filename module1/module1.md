@@ -32,6 +32,7 @@
   <img src="https://github.com/exxxidde/demo/blob/main/%D1%82%D0%BE%D0%BF%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D1%8F.png" height="600">
 </p>
 
+<br>
 
 ## 1. Базовая настройка устройств
 
@@ -191,6 +192,7 @@ default via 172.16.4.1/28
 
 </details>
 
+<br>
 
 ## 2. Настройка ISP
 
