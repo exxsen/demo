@@ -185,14 +185,13 @@ DISABLED=no
 ```bash
 172.16.4.2/28
 ```
+
 Настраиваем файл `ipv4route` 
 ```bash
 default via 172.16.4.1/28
 ```
 
 </details>
-
-#
 
 **Настройка DNS сервера**
 
