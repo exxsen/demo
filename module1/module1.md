@@ -50,7 +50,7 @@
       <td rowspan="3"><b>ISP</b></td>
       <td>ens33</td>
       <td>DHCP</td>
-      <td>/24</td>
+      <td>—</td>
       <td>—</td>
     </tr>
     <tr>
