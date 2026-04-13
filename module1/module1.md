@@ -170,21 +170,23 @@ exec bash — обновление оболочки
 <summary>Решение</summary>
 <br>
   
-**Создаем папку для интерфейса**
+Создаем папку для интерфейса
 ```bash
 mkdir /etc/net/ifaces/*имя интерфейса*
 ```
-**Настраиваем файл options (для статичного ip-адреса)**
+Настраиваем файл *options* (для статичного ip-адреса)
 ```bash
 TYPE=eth
 BOOTPROTO=static
 CONFIG_IPV4=yes
 DISABLED=no
 ```
-**Настраиваем файл ipv4address**
+Настраиваем файл *ipv4address* (пример)
+```bash
+172.16.4.1/28
+```
 
-
-**Включение маршрутизации**
+Включение маршрутизации
 В файле /etc/net/sysctl.conf изменяем строку:
 ```bash
 net.ipv4.ip_forward = 1
