@@ -14,9 +14,7 @@
 10. [Настройка DNS](#10-настройка-dns-для-офисов-hq-и-br)
 11. [Настройка часового пояса](#11-настройка-часового-пояса)
 
-
-
-# Задание 1 модуля 1
+#
 
 <p align="center">
   <img src="https://github.com/exxxidde/demo/blob/main/%D1%82%D0%BE%D0%BF%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D1%8F.png" height="600">
