@@ -505,9 +505,7 @@ write memory
 
 #
 
-#
-
-## HQ-RTR
+## BR-RTR
 
 Настройка конфигурации `ospf`
 
