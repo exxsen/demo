@@ -401,8 +401,38 @@ ansible all -m ping
 <summary>Решение</summary>
 <br>
 
-```bash
+**BR-RTR**
 
+Порт 80 -> 8080 (сервис wiki):
+```bash
+iptables -t nat -A PREROUTING -i ens33 -p tcp --dport 80 -j DNAT --to-destination 192.168.7.2:8080
+```
+
+Порт 2024 -> 2024:
+```bash
+iptables -t nat -A PREROUTING -i ens33 -p tcp --dport 2024 -j DNAT --to-destination 192.168.7.2:2024
+```
+
+```bash
+iptables-save > /etc/sysconfig/iptables
+```
+
+#
+
+**HQ-RTR**
+
+Порт 80 -> 80 (сервис moodle):
+```bash
+iptables -t nat -A PREROUTING -i ens33 -p tcp --dport 80 -j DNAT --to-destination 192.168.6.2:80
+```
+
+Порт 2024 -> 2024:
+```bash
+iptables -t nat -A PREROUTING -i ens33 -p tcp --dport 2024 -j DNAT --to-destination 192.168.6.2:2024
+```
+
+```bash
+iptables-save > /etc/sysconfig/iptables
 ```
 
 </details>
