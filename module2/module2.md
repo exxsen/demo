@@ -246,8 +246,58 @@ df -h | grep nfs
 <summary>Решение</summary>
 <br>
 
+# Настройка сервера (HQ-RTR)
+
+Установите пакет:
+```bash
+apt-get install -y chrony
+```
+Отредактируйте конфиг `/etc/chrony.conf`. Добавьте/измените следующие строки:
+
+```bash
+# Разрешаем синхронизацию для всех ваших сетей
+allow 192.168.0.0/16
+allow 172.16.0.0/12
+
+# Устанавливаем стратум 5 (имитация локального источника)
+local stratum 5
+```
 
 
+Перезапустите службу:
+```bash
+systemctl enable --now chronyd
+systemctl restart chrony
+```
+
+
+# Настройка клиентов (HQ-SRV, HQ-CLI, BR-RTR, BR-SRV)
+
+Установите chrony:
+
+```bash
+apt-get install -y chrony
+```
+
+Отредактируйте /etc/chrony.conf. Удалите (закомментируйте) все строки, начинающиеся на pool или server, и добавьте одну единственную строку, указывающую на ваш сервер:
+```bash
+server 192.168.6.1 iburst
+```
+
+Перезапустите службу:
+```bash
+systemctl enable --now chronyd
+systemctl restart chrony
+```
+
+# Проверка
+
+На любом клиенте выполните команду:
+```bash
+chronyc sources -v
+```
+
+В таблице вы должны увидеть строку с IP-адресом HQ-RTR. Если в начале строки стоит символ ^* — синхронизация успешно выполнена.
 
 </details>
 
