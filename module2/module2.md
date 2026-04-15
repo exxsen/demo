@@ -126,7 +126,9 @@ chmod 4755 /usr/bin/sudo
 session optional pam_mkhomedir.so skel=/etc/skel umask=0022 
 ```
 
-Вход в пользователя и проверка
+#
+
+Вход под пользователя и проверка
 
 ```bash
 su - user1.hq@au-team.irpo
