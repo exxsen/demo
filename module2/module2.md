@@ -311,8 +311,61 @@ chronyc sources -v
 <summary>Решение</summary>
 <br>
 
-```bash
+**Важный нюанс по заданию:**
+Убедитесь, что на всех Linux-машинах есть пользователь с правами sudo (не root).
 
+# BR-SRV
+
+Подготовка SSH-ключей
+
+```bash
+# Генерируем ключ (на все вопросы жмем Enter)
+ssh-keygen -t rsa
+```
+
+Копируем ключ на все устройства (порт 2024, пользователь sshuser или net_admin)
+
+```bash
+# Для серверов (HQ-SRV):
+ssh-copy-id -p 2024 sshuser@192.168.6.2
+# Для маршрутизаторов (HQ-RTR, BR-RTR) и клиента (HQ-CLI) используйте их IP и пользователей:
+ssh-copy-id -p 22 net_admin@192.168.6.1
+ssh-copy-id -p 22 net_admin@192.168.7.1
+ssh-copy-id -p 22 user@172.16.5.3 (замените user на созданного пользователя) 
+```
+
+Установка и настройка Ansible
+
+```bash
+apt-get install ansible -y
+```
+
+Создаем рабочий каталог
+
+```bash
+mkdir -p /etc/ansible
+cd /etc/ansible
+```
+
+Создание файла инвентаря (`/etc/ansible/hosts`) с следующим содержимым
+
+```bash
+[routers]
+# Маршрутизаторы (порт 22 по умолчанию, можно не указывать)
+HQ-RTR ansible_host=192.168.6.1 ansible_user=net_admin ansible_port=22
+BR-RTR ansible_host=192.168.7.1 ansible_user=net_admin ansible_port=22
+
+[servers]
+HQ-SRV ansible_host=192.168.6.2 ansible_user=sshuser ansible_port=2024
+
+[clients]
+HQ-CLI ansible_host=192.168.5.3 ansible_user=user ansible_port=22
+```
+
+Проверка
+
+```bash
+ansible all -m ping
 ```
 
 </details>
@@ -331,6 +384,8 @@ chronyc sources -v
 <details>
 <summary>Решение</summary>
 <br>
+
+
 
 ```bash
 
