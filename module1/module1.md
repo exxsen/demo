@@ -178,7 +178,7 @@ DISABLED=no
 
 Настраиваем файл `/etc/net/ifaces/*имя интерфейса*/ipv4route`  (маршрут по умолчанию)
 ```bash
-default via 172.16.4.1/28
+default via 172.16.4.1
 ```
 
 #
