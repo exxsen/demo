@@ -322,6 +322,7 @@ net_admin ALL=(ALL) NOPASSWD:ALL
 
 <details>
 <summary>Решение</summary>
+
 <br>
 
 </details>
