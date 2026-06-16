@@ -492,6 +492,10 @@ docker-compose -f ~/wiki.yml up -d
 docker ps
 ```
 
+```bash
+curl -I http://localhost:8080
+```
+
 </details>
 
 <a name="task6"></a>
