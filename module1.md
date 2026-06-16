@@ -341,6 +341,8 @@ rm -f /etc/net/ifaces/ens37/ipv4address
 rm -f /etc/net/ifaces/ens37/ipv4route
 ```
 
+#
+
 Создание и настройка VLAN100
 
 ```bash
@@ -362,6 +364,8 @@ CONFIG_IPV4=yes
 ```bash
 192.168.6.1/26
 ```
+
+#
 
 Создание и настройка VLAN200
 
