@@ -1,7 +1,3 @@
-<details>
-<summary>Полное решение: Настройка HQ-RTR и BR-RTR на RouterOS v7</summary>
-<br>
-
 ### 1. Настройка маршрутизатора HQ-RTR
 
 **Базовые настройки и системный администратор**
@@ -185,5 +181,3 @@
 /routing ospf interface-template add instance=ospf-inst interfaces=gre-to-hq area=ospf-area auth=md5 auth-key="OSPF@P@ss" type=ptp
 /routing ospf interface-template add instance=ospf-inst interfaces=ether2 area=ospf-area passive=yes
 ```
-
-</details>
