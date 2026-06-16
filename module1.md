@@ -322,8 +322,23 @@ net_admin ALL=(ALL) NOPASSWD:ALL
 
 <details>
 <summary>Решение</summary>
-
 <br>
+  
+```bash
+nano /etc/net/ifaces/ens37/options
+```
+
+```bash
+TYPE=eth
+DISABLED=no
+CONFIG_IPV4=yes
+```
+
+```bash
+rm -f /etc/net/ifaces/ens37/ipv4address
+rm -f /etc/net/ifaces/ens37/ipv4route
+```
+
 
 </details>
 
