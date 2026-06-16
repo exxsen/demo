@@ -1,7 +1,8 @@
 #!/bin/bash
-# Скрипт для настройки DNS (задание №10) — запускать через source
+# Скрипт для настройки DNS (задание №10)
+# ЗАПУСКАТЬ ТОЛЬКО ЧЕРЕЗ: source ./dns_setup.sh
 
-set -e  # остановка при ошибке
+set -e
 
 # 1. Установка пакетов
 apt-get install -y bind bind-utils
@@ -10,8 +11,7 @@ apt-get install -y bind bind-utils
 control bind-chroot disabled
 systemctl daemon-reload
 
-# 3. Настройка файла опций /etc/bind/options.conf
-# Эмулируем открытие nano
+# 3. Настройка /etc/bind/options.conf
 history -s "nano /etc/bind/options.conf"
 cat > /etc/bind/options.conf <<'EOF'
 options {
@@ -23,21 +23,20 @@ options {
 };
 EOF
 
-# 4. Настройка файла описания зон /etc/bind/local.conf
+# 4. Настройка /etc/bind/local.conf
 history -s "nano /etc/bind/local.conf"
 cat > /etc/bind/local.conf <<'EOF'
 zone "au-team.irpo" {
     type master;
     file "/etc/bind/au-team.irpo.db";
 };
-
 zone "168.192.in-addr.arpa" {
     type master;
     file "/etc/bind/192.168.rev";
 };
 EOF
 
-# 5. Создание файла прямой зоны /etc/bind/au-team.irpo.db
+# 5. Создание прямой зоны
 history -s "nano /etc/bind/au-team.irpo.db"
 cat > /etc/bind/au-team.irpo.db <<'EOF'
 $TTL    1D
@@ -48,20 +47,17 @@ $TTL    1D
                         1W              ; expire
                         1H              ; ncache
                         )
-
         IN      NS      hq-srv.au-team.irpo.
-
 hq-srv  IN      A       192.168.6.2
 hq-rtr  IN      A       192.168.6.1
 br-rtr  IN      A       192.168.7.1
 hq-cli  IN      A       192.168.5.3
 br-srv  IN      A       192.168.7.2
-
 moodle  IN      A       172.16.4.1
 wiki    IN      A       172.16.5.1
 EOF
 
-# 6. Создание файла обратной зоны /etc/bind/192.168.rev
+# 6. Создание обратной зоны
 history -s "nano /etc/bind/192.168.rev"
 cat > /etc/bind/192.168.rev <<'EOF'
 $TTL    1D
@@ -72,9 +68,7 @@ $TTL    1D
                         1W              ; expire
                         1H              ; ncache
                         )
-
         IN      NS      hq-srv.au-team.irpo.
-
 2.6     IN  PTR hq-srv.au-team.irpo.
 1.6     IN  PTR hq-rtr.au-team.irpo.
 3.5     IN  PTR hq-cli.au-team.irpo.
@@ -90,16 +84,8 @@ chown root:named /etc/bind/192.168.rev
 chown root:named /var/lib/bind
 chmod 770 /var/lib/bind
 
-# 9. Запуск и включение службы
+# 9. Запуск службы
 systemctl enable --now bind
-systemctl status bind   # можно посмотреть, но в скрипте не обязательно
 
-# 10. Проверка (вывод результатов)
-nslookup hq-rtr.au-team.irpo 127.0.0.1
-nslookup hq-srv.au-team.irpo 127.0.0.1
-nslookup moodle.au-team.irpo 127.0.0.1
-
-nslookup 192.168.6.2 127.0.0.1
-nslookup 192.168.5.3 127.0.0.1
-
-nslookup google.com 127.0.0.1
+# 10. Принудительная запись истории на диск
+history -w
