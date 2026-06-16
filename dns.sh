@@ -8,7 +8,7 @@ run() {
 }
 
 
-run "apt-get install -y bind bind-utils"
+run "apt-get update && apt-get install -y bind bind-utils"
 run "control bind-chroot disabled"
 run "systemctl daemon-reload"
 
