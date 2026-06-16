@@ -1,24 +1,18 @@
 #!/bin/bash
-# Скрипт для настройки DNS (задание №10)
-# ЗАПУСКАТЬ ТОЛЬКО ЧЕРЕЗ: source ./dns_setup.sh
-
 set -e
-
-# Включаем историю на всякий случай
 set -o history
 
-# Функция: записать команду в историю и выполнить
 run() {
     history -s "$*"
     eval "$*"
 }
 
-# ---- Установка и базовая настройка ----
+
 run "apt-get install -y bind bind-utils"
 run "control bind-chroot disabled"
 run "systemctl daemon-reload"
 
-# ---- Конфигурационные файлы (имитация nano) ----
+
 history -s "nano /etc/bind/options.conf"
 cat > /etc/bind/options.conf <<'EOF'
 options {
@@ -78,18 +72,17 @@ $TTL    1D
 3.5     IN  PTR hq-cli.au-team.irpo.
 EOF
 
-# ---- Проверка синтаксиса ----
+
 run "named-checkconf /etc/bind/options.conf"
 run "named-checkconf /etc/bind/local.conf"
 
-# ---- Права доступа ----
+
 run "chown root:named /etc/bind/au-team.irpo.db"
 run "chown root:named /etc/bind/192.168.rev"
 run "chown root:named /var/lib/bind"
 run "chmod 770 /var/lib/bind"
 
-# ---- Запуск службы ----
+
 run "systemctl enable --now bind"
 
-# ---- Принудительная запись истории на диск ----
 history -w
