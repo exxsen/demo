@@ -558,7 +558,55 @@ iptables-save > /etc/sysconfig/iptables
 <br>
 
 ```bash
+apt-get install -y moodle3.3 moodle3.3-apache2 moodle3.3-local-mysql
+```
 
+#
+
+Запуск и настройка базы данных
+
+```bash
+systemctl enable --now mysqld
+mysqladmin password 'P@ssw0rd'
+```
+
+```bash
+mysql -u root -pP@ssw0rd -e "CREATE DATABASE moodledb DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
+mysql -u root -pP@ssw0rd -e "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,CREATE TEMPORARY TABLES,DROP,INDEX,ALTER ON moodledb.* TO moodle@localhost IDENTIFIED BY 'P@ssw0rd';"
+mysql -u root -pP@ssw0rd -e "FLUSH PRIVILEGES;"
+```
+
+#
+
+Запуск CLI-установщика
+
+```bash
+cd /var/www/moodle
+sudo -u apache /usr/bin/php admin/cli/install.php \
+    --non-interactive \
+    --agreelicense \
+    --lang=ru \
+    --wwwroot="http://192.168.6.2/moodle" \
+    --dataroot="/var/lib/moodle" \
+    --dbtype="mysqli" \
+    --dbhost="localhost" \
+    --dbname="moodledb" \
+    --dbuser="moodle" \
+    --dbpass="P@ssw0rd" \
+    --admin-pass="P@ssw0rd" \
+    --fullname="X" \
+    --shortname="X"
+```
+
+#
+
+Настройка прав доступа
+
+```bash
+chown -R apache:apache /var/www/moodle /var/lib/moodle
+```
+```bash
+systemctl enable --now httpd2
 ```
 
 </details>
