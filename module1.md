@@ -323,7 +323,9 @@ net_admin ALL=(ALL) NOPASSWD:ALL
 <details>
 <summary>Решение</summary>
 <br>
-  
+
+Удаление IP-адреса с физических интерфейсов для создания VLAN
+
 ```bash
 nano /etc/net/ifaces/ens37/options
 ```
@@ -337,6 +339,50 @@ CONFIG_IPV4=yes
 ```bash
 rm -f /etc/net/ifaces/ens37/ipv4address
 rm -f /etc/net/ifaces/ens37/ipv4route
+```
+
+Создание и настройка VLAN100
+
+```bash
+mkdir /etc/net/ifaces/ens37.100
+```
+
+Создайте файл `/etc/net/ifaces/ens37.100/options`
+
+```bash
+TYPE=vlan
+HOST=ens37
+VID=100
+DISABLED=no
+CONFIG_IPV4=yes
+```
+
+`/etc/net/ifaces/ens37.100/ipv4address`
+
+```bash
+192.168.6.1/26
+```
+
+Создание и настройка VLAN200
+
+```bash
+mkdir /etc/net/ifaces/ens38.200
+```
+
+Создайте файл `/etc/net/ifaces/ens38.200/options`
+
+```bash
+TYPE=vlan
+HOST=ens38
+VID=200
+DISABLED=no
+CONFIG_IPV4=yes
+```
+
+`/etc/net/ifaces/ens37.200/ipv4address`
+
+```bash
+192.168.5.1/28
 ```
 
 
