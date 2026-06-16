@@ -382,10 +382,114 @@ ansible all -m ping
 <summary>Решение</summary>
 <br>
 
+Выполните на сервере BR-SRV
+```bash
+apt-get install -y docker-engine docker-compose
+```
+```bash
+systemctl enable --now docker
+```
+```bash
+gpasswd -a sshuser docker
+```
+Важно: Чтобы изменения вступили в силу, выйдите из системы и зайдите заново (или выполните newgrp docker).
 
+#
+
+Создание файла LocalSettings.php
+```bash
+nano ~/LocalSettings.php
+```
 
 ```bash
+<?php
+# Защита от прямого вызова
+if ( !defined( 'MEDIAWIKI' ) ) {
+    exit;
+}
 
+# Базовые настройки сайта
+$wgSitename = "My ALT Wiki";
+$wgMetaNamespace = "Project";
+$wgScriptPath = "";
+$wgArticlePath = "/wiki/$1";
+$wgServer = "http://localhost:8080"; # Измените localhost на IP сервера, если нужно
+
+# Настройки подключения к базе данных (Берем из задания)
+$wgDBtype = "mysql";
+$wgDBserver = "mariadb:3306";
+$wgDBname = "mediawiki";
+$wgDBuser = "wiki";
+$wgDBpassword = "WikiP@ssw0rd";
+
+# Настройки безопасности и ключи (заглушки)
+$wgSecretKey = "super_secret_key_1234567890abcdef";
+$wgUpgradeKey = "upgrade_key_12345";
+
+# Язык интерфейса
+$wgLanguageCode = "ru";
+
+# Отключение почты
+$wgEnableEmail = false;
+```
+
+#
+
+Создание файла wiki.yml
+
+```bash
+nano ~/wiki.yml
+```
+```bash
+version: '3'
+
+services:
+  wiki:
+    image: mediawiki:latest
+    container_name: wiki
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./LocalSettings.php:/var/www/html/LocalSettings.php:ro
+      - wiki_images:/var/www/html/images
+    depends_on:
+      - mariadb
+
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_secure_pass
+      MYSQL_DATABASE: mediawiki
+      MYSQL_USER: wiki
+      MYSQL_PASSWORD: WikiP@ssw0rd
+    volumes:
+      - db_data:/var/lib/mysql
+      # Этот пункт скопирует схему БД MediaWiki внутрь контейнера для инициализации
+      - ./tables.sql:/docker-entrypoint-initdb.d/tables.sql:ro
+
+volumes:
+  wiki_images:
+  db_data:
+```
+
+#
+
+Генерация схемы базы данных
+```bash
+docker run --rm mediawiki:latest cat /var/www/html/maintenance/tables.sql > ~/tables.sql
+```
+
+#
+
+```bash
+docker-compose -f ~/wiki.yml up -d
+```
+
+```bash
+docker ps
 ```
 
 </details>
