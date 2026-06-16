@@ -320,6 +320,8 @@ net_admin ALL=(ALL) NOPASSWD:ALL
 - Создайте подсеть управления с **VLAN 999**.
 - Основные сведения о настройке коммутатора и выборе реализации разделения на VLAN занесите в отчёт.
 
+По идее надо использовать только один интерфейс для подключения HQ-CLI и HQ-SRV
+
 <details>
 <summary>Решение</summary>
 <br>
@@ -370,14 +372,14 @@ CONFIG_IPV4=yes
 Создание и настройка VLAN200
 
 ```bash
-mkdir /etc/net/ifaces/ens38.200
+mkdir /etc/net/ifaces/ens37.200
 ```
 
-Создайте файл `/etc/net/ifaces/ens38.200/options`
+Создайте файл `/etc/net/ifaces/ens37.200/options`
 
 ```bash
 TYPE=vlan
-HOST=ens38
+HOST=ens37
 VID=200
 DISABLED=no
 CONFIG_IPV4=yes
@@ -389,10 +391,35 @@ CONFIG_IPV4=yes
 192.168.5.1/28
 ```
 
+#
+
+Настройка VLAN 999
+
+```bash
+mkdir /etc/net/ifaces/ens37.999
+```
+
+Создайте файл `/etc/net/ifaces/ens37.999/options`
+
+```bash
+TYPE=vlan
+HOST=ens37
+VID=999
+DISABLED=no
+CONFIG_IPV4=yes
+```
+
+`/etc/net/ifaces/ens37.200/ipv4address`
+
+```bash
+192.168.9.1/29
+```
 
 </details>
 
 <br>
+
+
 
 ## 5. Настройка безопасного удаленного доступа на серверах HQ-SRV и BR-SRV (SSH)
 
@@ -663,7 +690,7 @@ apt-get instll dhcp-server -y
 Выбор интерфейса для раздачи DHCP, необходимо внести запись в `/etc/sysconfig/dhcpd`
 
 ```bash
-DHCPDARGS=ens37
+DHCPDARGS=ens37  (если настроен vlan то DHCPDARGS=ens37.200)
 ```
 
 Настройка конфигурации DHCP `/etc/dhcp/dhcpd.conf`
