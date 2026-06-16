@@ -558,7 +558,7 @@ iptables-save > /etc/sysconfig/iptables
 <br>
 
 ```bash
-apt-get install -y moodle3.3 moodle3.3-apache2 moodle3.3-local-mysql
+apt-get install -y moodle moodle-apache2 moodle-local-mysql
 ```
 
 #
@@ -567,13 +567,14 @@ apt-get install -y moodle3.3 moodle3.3-apache2 moodle3.3-local-mysql
 
 ```bash
 systemctl enable --now mysqld
-mysqladmin password 'P@ssw0rd'
+mysqladmin -u root password 'P@ssw0rd'
 ```
 
 ```bash
-mysql -u root -pP@ssw0rd -e "CREATE DATABASE moodledb DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
-mysql -u root -pP@ssw0rd -e "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,CREATE TEMPORARY TABLES,DROP,INDEX,ALTER ON moodledb.* TO moodle@localhost IDENTIFIED BY 'P@ssw0rd';"
-mysql -u root -pP@ssw0rd -e "FLUSH PRIVILEGES;"
+mysql -u root -p'P@ssw0rd' -e "CREATE DATABASE moodledb DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+mysql -u root -p'P@ssw0rd' -e "CREATE USER 'moodle'@'localhost' IDENTIFIED BY 'P@ssw0rd';"
+mysql -u root -p'P@ssw0rd' -e "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,CREATE TEMPORARY TABLES,DROP,INDEX,ALTER ON moodledb.* TO 'moodle'@'localhost';"
+mysql -u root -p'P@ssw0rd' -e "FLUSH PRIVILEGES;"
 ```
 
 #
@@ -586,16 +587,16 @@ sudo -u apache /usr/bin/php admin/cli/install.php \
     --non-interactive \
     --agreelicense \
     --lang=ru \
-    --wwwroot="http://192.168.6.2/moodle" \
+    --wwwroot="http://192.168.6" \
     --dataroot="/var/lib/moodle" \
-    --dbtype="mysqli" \
+    --dbtype="mariadb" \
     --dbhost="localhost" \
     --dbname="moodledb" \
     --dbuser="moodle" \
     --dbpass="P@ssw0rd" \
-    --admin-pass="P@ssw0rd" \
-    --fullname="X" \
-    --shortname="X"
+    --adminpass="P@ssw0rd" \
+    --fullname="СЮДА_ПИШИТЕ_НОМЕР" \
+    --shortname="СЮДА_ПИШИТЕ_НОМЕР"
 ```
 
 #
@@ -604,8 +605,7 @@ sudo -u apache /usr/bin/php admin/cli/install.php \
 
 ```bash
 chown -R apache:apache /var/www/moodle /var/lib/moodle
-```
-```bash
+chmod 2777 /var/lib/moodle
 systemctl enable --now httpd2
 ```
 
