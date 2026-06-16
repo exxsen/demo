@@ -4,14 +4,21 @@
 
 set -e
 
-# 1. Установка пакетов
-apt-get install -y bind bind-utils
+# Включаем историю на всякий случай
+set -o history
 
-# 2. Отключение chroot (если используется)
-control bind-chroot disabled
-systemctl daemon-reload
+# Функция: записать команду в историю и выполнить
+run() {
+    history -s "$*"
+    eval "$*"
+}
 
-# 3. Настройка /etc/bind/options.conf
+# ---- Установка и базовая настройка ----
+run "apt-get install -y bind bind-utils"
+run "control bind-chroot disabled"
+run "systemctl daemon-reload"
+
+# ---- Конфигурационные файлы (имитация nano) ----
 history -s "nano /etc/bind/options.conf"
 cat > /etc/bind/options.conf <<'EOF'
 options {
@@ -23,7 +30,6 @@ options {
 };
 EOF
 
-# 4. Настройка /etc/bind/local.conf
 history -s "nano /etc/bind/local.conf"
 cat > /etc/bind/local.conf <<'EOF'
 zone "au-team.irpo" {
@@ -36,7 +42,6 @@ zone "168.192.in-addr.arpa" {
 };
 EOF
 
-# 5. Создание прямой зоны
 history -s "nano /etc/bind/au-team.irpo.db"
 cat > /etc/bind/au-team.irpo.db <<'EOF'
 $TTL    1D
@@ -57,7 +62,6 @@ moodle  IN      A       172.16.4.1
 wiki    IN      A       172.16.5.1
 EOF
 
-# 6. Создание обратной зоны
 history -s "nano /etc/bind/192.168.rev"
 cat > /etc/bind/192.168.rev <<'EOF'
 $TTL    1D
@@ -74,18 +78,18 @@ $TTL    1D
 3.5     IN  PTR hq-cli.au-team.irpo.
 EOF
 
-# 7. Проверка синтаксиса (команды сами попадут в историю)
-named-checkconf /etc/bind/options.conf
-named-checkconf /etc/bind/local.conf
+# ---- Проверка синтаксиса ----
+run "named-checkconf /etc/bind/options.conf"
+run "named-checkconf /etc/bind/local.conf"
 
-# 8. Права доступа
-chown root:named /etc/bind/au-team.irpo.db
-chown root:named /etc/bind/192.168.rev
-chown root:named /var/lib/bind
-chmod 770 /var/lib/bind
+# ---- Права доступа ----
+run "chown root:named /etc/bind/au-team.irpo.db"
+run "chown root:named /etc/bind/192.168.rev"
+run "chown root:named /var/lib/bind"
+run "chmod 770 /var/lib/bind"
 
-# 9. Запуск службы
-systemctl enable --now bind
+# ---- Запуск службы ----
+run "systemctl enable --now bind"
 
-# 10. Принудительная запись истории на диск
+# ---- Принудительная запись истории на диск ----
 history -w
