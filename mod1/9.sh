@@ -18,19 +18,8 @@ run "cp /etc/dhcp/dhcpd.conf.sample /etc/dhcp/dhcpd.conf"
 
 
 history -s "nano /etc/dhcp/dhcpd.conf"
-cat > /etc/dhcp/dhcpd.conf <<'EOF'
-default-lease-time 600;
-max-lease-time 7200;
-ddns-update-style none;
-authoritative;
+echo -e "default-lease-time 600;\nmax-lease-time 7200;\nddns-update-style none;\nauthoritative;\n\nsubnet 192.168.5.0 netmask 255.255.255.240 {\n  range 192.168.5.3 192.168.5.6;\n  option domain-name-servers 192.168.6.2;\n  option domain-name \"au-team.irpo\";\n  option routers 192.168.5.1;\n}" > /etc/dhcp/dhcpd.conf
 
-subnet 192.168.5.0 netmask 255.255.255.240 {
-  range 192.168.5.3 192.168.5.6;
-  option domain-name-servers 192.168.6.2;
-  option domain-name "au-team.irpo";
-  option routers 192.168.5.1;
-}
-EOF
 
 run "systemctl enable --now dhcpd"
 
