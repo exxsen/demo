@@ -21,62 +21,11 @@ run "systemctl restart docker"
 
 
 history -s "nano /home/sshuser/LocalSettings.php"
-cat > /home/sshuser/LocalSettings.php <<'EOF'
-<?php
-if ( !defined( 'MEDIAWIKI' ) ) {
-    exit;
-}
-$wgSitename = "My ALT Wiki";
-$wgMetaNamespace = "Project";
-$wgScriptPath = "";
-$wgArticlePath = "/wiki/$1";
-$wgServer = "http://localhost:8080";
-$wgDBtype = "mysql";
-$wgDBserver = "mariadb:3306";
-$wgDBname = "mediawiki";
-$wgDBuser = "wiki";
-$wgDBpassword = "WikiP@ssw0rd";
-$wgSecretKey = "super_secret_key_1234567890abcdef";
-$wgUpgradeKey = "upgrade_key_12345";
-$wgLanguageCode = "ru";
-$wgEnableEmail = false;
-EOF
-
+echo -e "<?php\nif ( !defined( 'MEDIAWIKI' ) ) {\n    exit;\n}\n\$wgSitename = \"My ALT Wiki\";\n\$wgMetaNamespace = \"Project\";\n\$wgScriptPath = \"\";\n\$wgArticlePath = \"/wiki/\$1\";\n\$wgServer = \"http://localhost:8080\";\n\$wgDBtype = \"mysql\";\n\$wgDBserver = \"mariadb:3306\";\n\$wgDBname = \"mediawiki\";\n\$wgDBuser = \"wiki\";\n\$wgDBpassword = \"WikiP@ssw0rd\";\n\$wgSecretKey = \"super_secret_key_1234567890abcdef\";\n\$wgUpgradeKey = \"upgrade_key_12345\";\n\$wgLanguageCode = \"ru\";\n\$wgEnableEmail = false;" > /home/sshuser/LocalSettings.php
 
 history -s "nano /home/sshuser/wiki.yml"
-cat > /home/sshuser/wiki.yml <<'EOF'
-version: '3'
+echo -e "version: '3'\n\nservices:\n  wiki:\n    image: mediawiki:latest\n    container_name: wiki\n    restart: always\n    ports:\n      - \"8080:80\"\n    volumes:\n      - ./LocalSettings.php:/var/www/html/LocalSettings.php:ro\n      - wiki_images:/var/www/html/images\n    depends_on:\n      - mariadb\n\n  mariadb:\n    image: mariadb:latest\n    container_name: mariadb\n    restart: always\n    environment:\n      MYSQL_ROOT_PASSWORD: root_secure_pass\n      MYSQL_DATABASE: mediawiki\n      MYSQL_USER: wiki\n      MYSQL_PASSWORD: WikiP@ssw0rd\n    volumes:\n      - db_data:/var/lib/mysql\n      - ./tables.sql:/docker-entrypoint-initdb.d/tables.sql:ro\n\nvolumes:\n  wiki_images:\n  db_data:" > /home/sshuser/wiki.yml
 
-services:
-  wiki:
-    image: mediawiki:latest
-    container_name: wiki
-    restart: always
-    ports:
-      - "8080:80"
-    volumes:
-      - ./LocalSettings.php:/var/www/html/LocalSettings.php:ro
-      - wiki_images:/var/www/html/images
-    depends_on:
-      - mariadb
-
-  mariadb:
-    image: mariadb:latest
-    container_name: mariadb
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root_secure_pass
-      MYSQL_DATABASE: mediawiki
-      MYSQL_USER: wiki
-      MYSQL_PASSWORD: WikiP@ssw0rd
-    volumes:
-      - db_data:/var/lib/mysql
-      - ./tables.sql:/docker-entrypoint-initdb.d/tables.sql:ro
-
-volumes:
-  wiki_images:
-  db_data:
-EOF
 
 
 run "docker run --rm mediawiki:latest cat /var/www/html/maintenance/tables.sql > /home/sshuser/tables.sql"
