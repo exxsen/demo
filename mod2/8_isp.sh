@@ -17,8 +17,7 @@ run "mkdir -p /etc/nginx/sites-available /etc/nginx/sites-enabled"
 
 
 history -s "nano /etc/nginx/sites-available/moodle"
-cat > /etc/nginx/sites-available/moodle <<'EOF'
-server {
+echo 'server {
     listen 80;
     server_name moodle.au-team.irpo;
 
@@ -28,13 +27,11 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
-}
-EOF
+}' > /etc/nginx/sites-available/moodle
 
 
 history -s "nano /etc/nginx/sites-available/wiki"
-cat > /etc/nginx/sites-available/wiki <<'EOF'
-server {
+echo 'server {
     listen 80;
     server_name wiki.au-team.irpo;
 
@@ -44,8 +41,8 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
-}
-EOF
+}' > /etc/nginx/sites-available/wiki
+
 
 
 run "ln -sf /etc/nginx/sites-available/moodle /etc/nginx/sites-enabled/"
