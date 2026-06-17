@@ -26,3 +26,6 @@ source ./название.sh
 ```bash
 wget https://raw.githubusercontent.com/exxsen/demo/main/mod1 или 2 /название
 ```
+```bash
+curl -L -O https://raw.githubusercontent.com/exxsen/demo/main/mod1 или 2 /название
+```
