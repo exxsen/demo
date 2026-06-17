@@ -24,5 +24,5 @@ source ./название.sh
 Для скачивания 
 
 ```bash
-wget https://raw.githubusercontent.com/exxsen/demo/main/название
+wget https://raw.githubusercontent.com/exxsen/demo/main/mod1 или 2 /название
 ```
