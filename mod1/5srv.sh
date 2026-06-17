@@ -10,21 +10,12 @@ run() {
 
 
 history -s "nano /etc/openssh/sshd_config"
-cat > /etc/openssh/sshd_config <<'EOF'
-Port 2024
-MaxAuthTries 2
-PasswordAuthentication yes
-Banner /etc/openssh/bannermotd
-AllowUsers  sshuser
-EOF
+echo -e "Port 2024\nMaxAuthTries 2\nPasswordAuthentication yes\nBanner /etc/openssh/bannermotd\nAllowUsers  sshuser" > /etc/openssh/sshd_config
 
 history -s "nano /etc/openssh/bannermotd"
-cat > /etc/openssh/bannermotd <<'EOF'
-----------------------
-Authorized access only
-----------------------
-EOF
+echo -e "----------------------\nAuthorized access only\n----------------------" > /etc/openssh/bannermotd
 
 run "systemctl restart sshd"
+
 
 history -w
